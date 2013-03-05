@@ -31,6 +31,17 @@ from ckan import model
 
 from .ogr2reclinejs import OGR2Reclinejs, ProjectionException
 
+def clean_tags(taglist):
+    """
+    Tags are only alphanum with '_-.'
+    """
+    tags = []
+    for word in taglist:
+        for candidate in tag_sep.split(word):
+            if len(candidate) > 1:
+                tags.append(candidate)
+    return tags
+
 def _post_multipart(self, selector, fields, files):
     '''Post fields and files to an http host as multipart/form-data.
 
@@ -149,6 +160,20 @@ def extract_metadata(xml_file):
                     metadata[desc.decode('utf-8')] = match.content.strip().decode('utf-8')
             except Exception as e:
                 log.debug('ERROR while processing line [%s] %s', (rule, e))
+
+    data = metadata[' Informazioni di Identificazione: Data']
+
+    meta_constant = {
+        u'Titolare' : 'Provincia Autonoma di Trento',
+        u'Codifica Caratteri': 'UTF8',
+        u'Categorie' : 'Ambiente',
+        u'Copertura temporale (data inizio)' : data,
+        u'Copertura temporale (data fine)' : data,
+        u'Data di di pubblicazione' : data,
+        u'Data di di aggiornamento' : data,
+        u'Data di di creazione' : data,
+    }
+    metadata.update(meta_constant)
     return metadata
 
 def unzip(file, out_dir):
@@ -296,6 +321,8 @@ class PatGeoHarvester(HarvesterBase):
         elem = json.loads(harvest_object.content)
         metadata = extract_metadata(elem['xml_file'])
         os.remove(elem['xml_file'])
+        metadata.update(extras_constant)
+        modified = metadata['Metadato: Data dei metadati']
 
         package_dict = {
             u'id': sha1(elem['meta_url']).hexdigest(),
@@ -308,17 +335,16 @@ class PatGeoHarvester(HarvesterBase):
             u'author_email': metadata['Informazioni di Identificazione: E-mail'],
             u'maintainer': metadata['Informazioni sulla Distribuzione: Distributore: Nome dell\'Ente'],
             u'maintainer_email': metadata['Informazioni sulla Distribuzione: Distributore: E-mail'],
-            u'tags': map(lambda t: re.sub('[^-_.\w]', ' ', t).decode('utf-8'), elem['tags']),
+            u'tags': clean_tags(map(lambda t: re.sub('[^-_.\w]', ' ', t).decode('utf-8'), elem['tags'])),
             u'extras': metadata,
             u'isopen': True,
             u'license': u'Creative Commons CCZero',
             u'license_id': u'cc-zero',
             u'license_title': u'Creative Commons CCZero',
             u'license_url': u'http://creativecommons.org/publicdomain/zero/1.0/deed.it',
-            u'resources': []
+            u'resources': [],
+            u'metadata_modified' : modified,
         }
-
-        modified = metadata['Metadato: Data dei metadati']
 
         xml_dict = {
             'url': elem['xml_url'],
@@ -348,8 +374,9 @@ class PatGeoHarvester(HarvesterBase):
 
         zip_dict = {
             'url': zip_url,
-            'format': 'zip',
+            'format': 'ESRI ShapeFile',
             'mimetype': 'application/zip',
+            'mimetype_inner' : 'application/shp',
             'resource_type': 'file',
             'description': package_dict['notes'],
             'name': "Dati in formato Shapefile",
@@ -381,8 +408,5 @@ class PatGeoHarvester(HarvesterBase):
         prunedir(work_dir)
 
         package_dict['name'] = self._gen_new_name(package_dict['title'])
-
-        # Set the modification date
-        package_dict['metadata_modified'] = modified
 
         return self._create_or_update_package(package_dict, harvest_object)
