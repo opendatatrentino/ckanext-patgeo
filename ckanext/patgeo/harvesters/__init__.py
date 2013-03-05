@@ -172,6 +172,7 @@ def extract_metadata(xml_file):
         u'Data di di pubblicazione' : data,
         u'Data di di aggiornamento' : data,
         u'Data di di creazione' : data,
+        u'URL Sito': metadata["Informazioni di Identificatione: Punto di Contatto: Risorsa Online"],
     }
     metadata.update(meta_constant)
     return metadata
