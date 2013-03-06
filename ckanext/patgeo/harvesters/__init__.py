@@ -31,7 +31,7 @@ from ckan import model
 
 from .ogr2reclinejs import OGR2Reclinejs, ProjectionException
 
-tag_sep = re.compile(" con | del.?.? | ed |[, ']")
+tag_sep = re.compile(" con | del.?.? | ed | di |[, ']")
 
 def clean_tags(taglist):
     """
