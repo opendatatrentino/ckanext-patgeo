@@ -31,6 +31,8 @@ from ckan import model
 
 from .ogr2reclinejs import OGR2Reclinejs, ProjectionException
 
+tag_sep = re.compile(" con | del.?.? | ed |[, ']")
+
 def clean_tags(taglist):
     """
     Tags are only alphanum with '_-.'
@@ -161,18 +163,21 @@ def extract_metadata(xml_file):
             except Exception as e:
                 log.debug('ERROR while processing line [%s] %s', (rule, e))
 
-    data = metadata[' Informazioni di Identificazione: Data']
+    data = metadata['Informazioni di Identificazione: Data']
+    year, month, day = [int(i) for i in data.split('-')]
+    data = datetime.datetime(year, month, day).isoformat()
+
 
     meta_constant = {
         u'Titolare' : 'Provincia Autonoma di Trento',
         u'Codifica Caratteri': 'UTF8',
         u'Categorie' : 'Ambiente',
-        u'Copertura temporale (data inizio)' : data,
-        u'Copertura temporale (data fine)' : data,
-        u'Data di di pubblicazione' : data,
-        u'Data di di aggiornamento' : data,
-        u'Data di di creazione' : data,
-        u'URL Sito': metadata["Informazioni di Identificatione: Punto di Contatto: Risorsa Online"],
+        u'Copertura Temporale (Data di inizio)' : data,
+        u'Copertura Temporale (Data di fine)' : data,
+        u'Data di pubblicazione' : data,
+        u'Data di aggiornamento' : data,
+        u'Data di creazione' : data,
+        u'URL sito': metadata["Informazioni di Identificatione: Punto di Contatto: Risorsa Online"],
     }
     metadata.update(meta_constant)
     return metadata
@@ -322,7 +327,6 @@ class PatGeoHarvester(HarvesterBase):
         elem = json.loads(harvest_object.content)
         metadata = extract_metadata(elem['xml_file'])
         os.remove(elem['xml_file'])
-        metadata.update(extras_constant)
         modified = metadata['Metadato: Data dei metadati']
 
         package_dict = {
