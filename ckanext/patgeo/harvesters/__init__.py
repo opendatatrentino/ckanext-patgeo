@@ -170,7 +170,7 @@ def extract_metadata(xml_file):
 
     meta_constant = {
         u'Titolare' : 'Provincia Autonoma di Trento',
-        u'Codifica Caratteri': 'UTF8',
+        u'Codifica Caratteri': 'UTF-8',
         u'Categorie' : 'Ambiente',
         u'Copertura Temporale (Data di inizio)' : data,
         u'Copertura Temporale (Data di fine)' : data,
