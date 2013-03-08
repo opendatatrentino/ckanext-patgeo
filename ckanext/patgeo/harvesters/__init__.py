@@ -60,11 +60,14 @@ def clean_tags(taglist):
     """
     tags = []
     for word in (tag.lower().replace('  ', ' ') for tag in taglist):
-        if word in tags_remove:
-            continue
-        tag = tags_subs.get(word, word)
-        if len(tag) > 1:
-            tags.append(tag)
+        # split on ","
+        for cleaned in (w.strip() for w in word.split(',')):
+            if cleaned in tags_remove:
+                continue
+            tag = tags_subs.get(cleaned, cleaned)
+            if len(tag) > 1:
+                # "'" are not accepted by ckan
+                tags.append(tag.replace("'", " "))
     return tags
 
 def _post_multipart(self, selector, fields, files):
@@ -186,21 +189,22 @@ def extract_metadata(xml_file):
             except Exception as e:
                 log.debug('ERROR while processing line [%s] %s', (rule, e))
 
-    data = metadata['Informazioni di Identificazione: Data']
+    data = metadata.pop('Informazioni di Identificazione: Data')
     year, month, day = [int(i) for i in data.split('-')]
     data = datetime.datetime(year, month, day).isoformat()
 
 
     meta_constant = {
         u'Titolare' : 'Provincia Autonoma di Trento',
-        u'Codifica Caratteri': 'UTF-8',
+        u'Codifica Caratteri': metadata.pop('Informazioni di Identificazione: Set dei caratteri dei metadati'),
         u'Categorie' : 'Ambiente',
         u'Copertura Temporale (Data di inizio)' : data,
-        u'Copertura Temporale (Data di fine)' : data,
+        u'Copertura Temporale (Data di fine)' : '',
         u'Data di pubblicazione' : data,
         u'Data di aggiornamento' : data,
+        u'Aggiornamento': 'Non programmato',
         u'Data di creazione' : data,
-        u'URL sito': metadata["Informazioni di Identificatione: Punto di Contatto: Risorsa Online"],
+        u'URL sito': metadata.pop("Informazioni di Identificatione: Punto di Contatto: Risorsa Online"),
     }
     metadata.update(meta_constant)
     return metadata
