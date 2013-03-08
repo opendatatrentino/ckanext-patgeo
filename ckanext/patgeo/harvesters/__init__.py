@@ -32,26 +32,26 @@ from ckan import model
 from .ogr2reclinejs import OGR2Reclinejs, ProjectionException
 
 tags_remove = [
-    'rdnt', 'siat', 'pup', 'db prior 10k', 'pup; rndt', 'inquadramenti di base',
+    'rndt', 'siat', 'pup', 'db prior 10k', 'pup; rndt', 'inquadramenti di base',
     'suap', 'scritte', 'pupagri', 'pupasc', 'pupbos',
 ]
 
 tags_subs = {
-        'bosc' : 'boschi',
-        'comun' : 'comuni',
-        'siti archeolog' : 'siti archeologici',
-        'archeolog' : 'archeologia',
-        'specchio d\'acqua' : 'specchi d\'acqua',
-        'tratte': 'tratte ferroviarie',
-        'viabilità di progetto': 'viabilità',
-        'viabilità ferroviaria':  'viabilità',
-        'viafer': 'viabilità',
-        'viabilità forestale': 'viabilità',
-        'zps': 'zone protezione speciale',
-        'udf': 'distretti forestali',
-        'uffici distrettuali forestali': 'distretti forestali',
-        'pascolo' : 'pascoli',
-        'idrografici' : 'idrografia',
+        u'bosc' : u'boschi',
+        u'comun' : u'comuni',
+        u'siti archeolog' : u'siti archeologici',
+        u'archeolog' : u'archeologia',
+        u'specchio d\'acqua' : u'specchi d\'acqua',
+        u'tratte': u'tratte ferroviarie',
+        u'viabilità di progetto': u'viabilità',
+        u'viabilità ferroviaria': u'viabilità',
+        u'viafer': u'viabilità',
+        u'viabilità forestale': u'viabilità',
+        u'zps': u'zone protezione speciale',
+        u'udf': u'distretti forestali',
+        u'uffici distrettuali forestali': u'distretti forestali',
+        u'pascolo' : u'pascoli',
+        u'idrografici' : u'idrografia',
         }
 
 def clean_tags(taglist):
