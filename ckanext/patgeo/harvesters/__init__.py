@@ -67,7 +67,7 @@ def clean_tags(taglist):
             tag = tags_subs.get(cleaned, cleaned)
             if len(tag) > 1:
                 # "'" are not accepted by ckan
-                tags.append(tag.replace("'", " "))
+                tags.append(tag.replace("'", " ").encode('utf8'))
     return tags
 
 def _post_multipart(self, selector, fields, files):
