@@ -46,6 +46,7 @@ tags_subs = {
         u'viabilità di progetto': u'viabilità',
         u'viabilità ferroviaria': u'viabilità',
         u'viafer': u'viabilità',
+        u'viabilit': u'viabilità',
         u'viabilità forestale': u'viabilità',
         u'zps': u'zone protezione speciale',
         u'udf': u'distretti forestali',
@@ -67,7 +68,15 @@ def clean_tags(taglist):
             tag = tags_subs.get(cleaned, cleaned)
             if len(tag) > 1:
                 # "'" are not accepted by ckan
-                tags.append(tag.replace("'", " ").decode('utf8'))
+                tag = tag.replace("'", " ")
+                try:
+                    tag = tag.decode('utf8')
+                except UnicodeEncodeError:
+                    pass
+                # bad FIXME
+                if u'viabilit' in tag:
+                    tag = u'viabilità'
+                tags.append(tag)
     return tags
 
 def _post_multipart(self, selector, fields, files):
