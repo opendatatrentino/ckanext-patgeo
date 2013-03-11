@@ -73,6 +73,9 @@ def clean_tags(taglist):
                     tag = tag.decode('utf8')
                 except UnicodeEncodeError:
                     pass
+                # remove scale
+                if u'1:' in tag:
+                    continue
                 tags.append(tag)
     return tags
 
