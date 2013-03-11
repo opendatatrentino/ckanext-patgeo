@@ -73,9 +73,6 @@ def clean_tags(taglist):
                     tag = tag.decode('utf8')
                 except UnicodeEncodeError:
                     pass
-                # bad FIXME
-                if u'viabilit' in tag:
-                    tag = u'viabilità'
                 tags.append(tag)
     return tags
 
@@ -204,6 +201,7 @@ def extract_metadata(xml_file):
 
 
     meta_constant = {
+        u'Categorie' : 'Ambiente',
         u'Titolare' : 'Provincia Autonoma di Trento',
         u'Codifica Caratteri': metadata.pop('Informazioni di Identificazione: Set dei caratteri dei metadati'),
         u'Copertura Temporale (Data di inizio)' : data,
@@ -373,12 +371,11 @@ class PatGeoHarvester(HarvesterBase):
             u'url': u'http://www.territorio.provincia.tn.it/',
             u'author': metadata['Informazioni di Identificazione: Nome dell\'Ente'],
             u'author_email': metadata['Informazioni di Identificazione: E-mail'],
-            u'maintainer': metadata['Informazioni sulla Distribuzione: Distributore: Nome dell\'Ente'],
+            u'maintainer': metadata['Informazioni sulla Distribuzione: Distributore: E-mail'],
             u'maintainer_email': metadata['Informazioni sulla Distribuzione: Distributore: E-mail'],
-            u'tags': clean_tags(map(lambda t: re.sub('[^-_.\w]', ' ', t).decode('utf-8'), elem['tags'])),
+            u'tags': clean_tags(elem['tags']),
             u'extras': metadata,
             u'isopen': True,
-            u'Categorie' : 'Ambiente',
             u'license': u'Creative Commons CCZero',
             u'license_id': u'cc-zero',
             u'license_title': u'Creative Commons CCZero',
