@@ -375,7 +375,7 @@ class PatGeoHarvester(HarvesterBase):
             u'author_email': metadata['Informazioni di Identificazione: E-mail'],
             u'maintainer': metadata['Informazioni sulla Distribuzione: Distributore: E-mail'],
             u'maintainer_email': metadata['Informazioni sulla Distribuzione: Distributore: E-mail'],
-            u'tags': clean_tags(elem['tags']) + [u'Ambiente'],
+            u'tags': clean_tags(elem['tags']),
             u'extras': metadata,
             u'isopen': True,
             u'license': u'Creative Commons CCZero',
@@ -449,4 +449,8 @@ class PatGeoHarvester(HarvesterBase):
 
         package_dict['name'] = self._gen_new_name(package_dict['title'])
 
-        return self._create_or_update_package(package_dict, harvest_object)
+        result = self._create_or_update_package(package_dict, harvest_object)
+
+        # add vocabulary tags
+
+        return result
