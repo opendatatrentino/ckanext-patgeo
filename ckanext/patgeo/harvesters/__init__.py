@@ -67,7 +67,7 @@ def clean_tags(taglist):
             tag = tags_subs.get(cleaned, cleaned)
             if len(tag) > 1:
                 # "'" are not accepted by ckan
-                tags.append(tag.replace("'", " ").encode('utf8'))
+                tags.append(tag.replace("'", " ").decode('utf8'))
     return tags
 
 def _post_multipart(self, selector, fields, files):
@@ -197,7 +197,6 @@ def extract_metadata(xml_file):
     meta_constant = {
         u'Titolare' : 'Provincia Autonoma di Trento',
         u'Codifica Caratteri': metadata.pop('Informazioni di Identificazione: Set dei caratteri dei metadati'),
-        u'Categorie' : 'Ambiente',
         u'Copertura Temporale (Data di inizio)' : data,
         u'Copertura Temporale (Data di fine)' : '',
         u'Data di pubblicazione' : data,
@@ -370,6 +369,7 @@ class PatGeoHarvester(HarvesterBase):
             u'tags': clean_tags(map(lambda t: re.sub('[^-_.\w]', ' ', t).decode('utf-8'), elem['tags'])),
             u'extras': metadata,
             u'isopen': True,
+            u'Categorie' : 'Ambiente',
             u'license': u'Creative Commons CCZero',
             u'license_id': u'cc-zero',
             u'license_title': u'Creative Commons CCZero',
