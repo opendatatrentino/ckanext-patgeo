@@ -207,8 +207,8 @@ def extract_metadata(xml_file):
         u'Titolare' : 'Provincia Autonoma di Trento',
         u'Codifica Caratteri': metadata.pop('Informazioni di Identificazione: Set dei caratteri dei metadati'),
         u'Copertura Temporale (Data di inizio)' : data,
-        u'Copertura Temporale (Data di fine)' : '',
         u'Data di pubblicazione' : data,
+        u'Copertura Geografica': 'Provincia di Trento',
         u'Data di aggiornamento' : data,
         u'Aggiornamento': 'Non programmato',
         u'Data di creazione' : data,
@@ -384,7 +384,7 @@ class PatGeoHarvester(HarvesterBase):
             u'license_url': u'http://creativecommons.org/publicdomain/zero/1.0/deed.it',
             u'resources': [],
             u'metadata_modified' : modified,
-            u'Categorie' : 'Ambiente',
+            u'Categorie' : 'Gestione del territorio',
         }
 
         xml_dict = {
