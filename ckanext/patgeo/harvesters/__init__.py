@@ -1,4 +1,4 @@
-# CKAN Harvester per Geodati
+# CKAN Harvester per il portale dei Dati Geografici
 # coding: utf-8
 
 import os
@@ -366,7 +366,7 @@ class PatGeoHarvester(HarvesterBase):
 
         package_dict = {
             u'id': sha1(elem['meta_url']).hexdigest(),
-            u'groups': ['geodati'],
+            u'groups': ['dati-geografici'],
             u'title': elem['title'],
             u'notes': metadata['Informazioni di Identificazione: Descrizione'],
             u'notes_rendered': metadata['Informazioni di Identificazione: Descrizione'],
