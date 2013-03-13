@@ -373,7 +373,8 @@ class PatGeoHarvester(HarvesterBase):
             u'url': u'http://www.territorio.provincia.tn.it/',
             u'author': metadata['Informazioni di Identificazione: Nome dell\'Ente'],
             u'author_email': metadata['Informazioni di Identificazione: E-mail'],
-            u'maintainer': metadata['Informazioni sulla Distribuzione: Distributore: E-mail'],
+            # Referente
+            u'maintainer': metadata['Informazioni di Identificatione: Punto di Contatto: Nome dell\'Ente'],
             u'maintainer_email': metadata['Informazioni sulla Distribuzione: Distributore: E-mail'],
             u'tags': clean_tags(elem['tags']),
             u'extras': metadata,
