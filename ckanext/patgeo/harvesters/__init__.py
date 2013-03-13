@@ -384,6 +384,7 @@ class PatGeoHarvester(HarvesterBase):
             u'license_url': u'http://creativecommons.org/publicdomain/zero/1.0/deed.it',
             u'resources': [],
             u'metadata_modified' : modified,
+            u'Categorie' : 'Ambiente',
         }
 
         xml_dict = {
@@ -449,8 +450,4 @@ class PatGeoHarvester(HarvesterBase):
 
         package_dict['name'] = self._gen_new_name(package_dict['title'])
 
-        result = self._create_or_update_package(package_dict, harvest_object)
-
-        # add vocabulary tags
-
-        return result
+        return self._create_or_update_package(package_dict, harvest_object)
