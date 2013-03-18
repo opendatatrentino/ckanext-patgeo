@@ -265,8 +265,11 @@ def download_big_file(url):
     return the created file name
     """
     log.debug('Downloading: %s', url)
-    basefile = os.path.basename(urlparse.urlsplit(url).path)
-    fd, big_filename = mkstemp(prefix=basefile + '_XXXX')
+    # separate extension from filename and keep them
+    # but generate a unique temp name
+    basefile, ext = os.path.basename(urlparse.urlsplit(url).path).rpartition('.')[0::2]
+    if ext != "": ext = '.' + ext
+    fd, big_filename = mkstemp(prefix=basefile, suffix=ext)
     with os.fdopen(fd, "w") as f:
         #r = requests.get(url, stream=True)
         r = requests.get(url)
@@ -416,7 +419,7 @@ class PatGeoHarvester(HarvesterBase):
 
         zip_dict = {
             'url': zip_url,
-            'format': 'ESRI ShapeFile',
+            'format': 'shp',
             'mimetype': 'application/zip',
             'mimetype_inner' : 'application/shp',
             'resource_type': 'file',
