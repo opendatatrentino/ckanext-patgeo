@@ -269,7 +269,7 @@ def download_big_file(url):
     # but generate a unique temp name
     basefile, ext = os.path.basename(urlparse.urlsplit(url).path).rpartition('.')[0::2]
     if ext != "": ext = '.' + ext
-    fd, big_filename = mkstemp(prefix=basefile, suffix=ext)
+    fd, big_filename = mkstemp(prefix=basefile + '_', suffix=ext)
     with os.fdopen(fd, "w") as f:
         #r = requests.get(url, stream=True)
         r = requests.get(url)
